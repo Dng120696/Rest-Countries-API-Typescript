@@ -1,5 +1,5 @@
 import { immer } from "zustand/middleware/immer";
-import { Action, Countries, State } from "./types";
+import { Action, Countries, Country, State } from "./types";
 import { create } from "zustand";
 import { initialState } from "./initialeState";
 
@@ -10,9 +10,13 @@ export const useStore = create<State & Action>()(
       set((state) => {
         state.countries = data;
       }),
-    searchCountry: (data: Countries) =>
+    setSearchedCountry: (data: Countries) =>
       set((state) => {
         state.searchedCountry = data;
+      }),
+    setSelectedCountry: (data: Country) =>
+      set((state) => {
+        state.selectedCountry = data;
       }),
   }))
 );

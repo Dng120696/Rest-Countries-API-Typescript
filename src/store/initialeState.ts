@@ -1,5 +1,6 @@
 export const initialState = {
   countries: [],
   isDark: false,
-  searchedCountry: null,
+  searchedCountry: [],
+  selectedCountry: null,
 };
