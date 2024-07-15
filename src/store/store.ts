@@ -18,5 +18,13 @@ export const useStore = create<State & Action>()(
       set((state) => {
         state.selectedCountry = data;
       }),
+    setSearchQuery: (query: string) =>
+      set((state) => {
+        state.searchQuery = query;
+      }),
+    setSelectedRegion: (region: string) =>
+      set((state) => {
+        state.selectedRegion = region;
+      }),
   }))
 );

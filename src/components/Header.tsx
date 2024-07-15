@@ -4,12 +4,16 @@ import sun from "../assets/icon-sun.svg";
 import { Link } from "react-router-dom";
 function Header() {
   const state = useStore();
-  const { isDark } = state;
+  const { isDark, setSearchQuery, setSelectedRegion } = state;
 
+  function handleResetQuery() {
+    setSearchQuery("");
+    setSelectedRegion("selected");
+  }
   return (
     <header className="py-10 shadow ">
       <nav className="flex items-center justify-between w-[clamp(30rem,90%,120rem)] mx-auto">
-        <Link to="/">
+        <Link to="/" onClick={handleResetQuery}>
           <h1 className="text-4xl font-extrabold">Where in the world?</h1>
         </Link>
         <div

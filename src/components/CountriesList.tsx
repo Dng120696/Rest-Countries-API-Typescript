@@ -10,7 +10,10 @@ function CountriesList({ countries }: { countries: Countries }) {
             <Link to={`/country/${data.name.common}`} key={i}>
               <div className="grid grid-rows-2 h-[30rem] w-[26rem] shadow-[0_0_1rem_rgba(0,0,0,0.15)] rounded overflow-hidden">
                 <div>
-                  <img src={data.flags.png} className="h-full w-full" />
+                  <img
+                    src={data.flags.png}
+                    className="h-full w-full border-b-gray-200 border-b-[1px]"
+                  />
                 </div>
                 <div className="py-10 px-6 text-xl ">
                   <h2 className="font-bold text-2xl mb-4">

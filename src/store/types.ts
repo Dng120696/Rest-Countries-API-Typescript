@@ -9,6 +9,17 @@ export type Country = {
   flags: {
     png: string;
   };
+  tld: string[];
+  currencies: {
+    [key: string]: {
+      name: string;
+    };
+  };
+  languages: {
+    [key: string]: string;
+  };
+  cca3: string;
+  borders: string[];
 };
 
 export type Countries = Country[];
@@ -18,10 +29,14 @@ export type State = {
   isDark: boolean;
   searchedCountry: Countries;
   selectedCountry: Country | null;
+  searchQuery: string;
+  selectedRegion: string;
 };
 
 export type Action = {
   setCountries: (data: Countries) => void;
   setSearchedCountry: (data: Countries) => void;
   setSelectedCountry: (data: Country) => void;
+  setSearchQuery: (query: string) => void;
+  setSelectedRegion: (region: string) => void;
 };
