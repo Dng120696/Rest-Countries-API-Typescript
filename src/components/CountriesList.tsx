@@ -8,11 +8,12 @@ function CountriesList({ countries }: { countries: Countries }) {
         countries.map((data, i) => {
           return (
             <Link to={`/country/${data.name.common}`} key={i}>
-              <div className="grid grid-rows-2 h-[30rem] w-[26rem] shadow-[0_0_1rem_rgba(0,0,0,0.15)] rounded overflow-hidden">
+              <div className="grid grid-rows-2 h-[30rem] w-[26rem] shadow-[0_0_1rem_rgba(0,0,0,0.15)] rounded overflow-hidden dark:bg-gray-700 dark:text-gray-100">
                 <div>
                   <img
                     src={data.flags.png}
-                    className="h-full w-full border-b-gray-200 border-b-[1px]"
+                    className="h-full w-full object-cover
+                    "
                   />
                 </div>
                 <div className="py-10 px-6 text-xl ">
@@ -21,20 +22,20 @@ function CountriesList({ countries }: { countries: Countries }) {
                   </h2>
                   <p className="mb-2">
                     <strong>Population: </strong>
-                    <span className="text-gray-600 font-medium">
+                    <span className="text-gray-600 dark:text-gray-300 font-medium">
                       {data.population.toLocaleString()}
                     </span>
                   </p>
                   <p className="mb-2">
                     <strong>Region: </strong>
-                    <span className="text-gray-600 font-medium">
+                    <span className="text-gray-600 dark:text-gray-300 font-medium">
                       {data.region}
                     </span>
                   </p>
                   <p className="mb-2">
                     <strong>Capital: </strong>
-                    <span className="text-gray-600 font-medium">
-                      {data.capital}
+                    <span className="text-gray-600 dark:text-gray-300 font-medium">
+                      {data.capital || "No Capital"}
                     </span>
                   </p>
                 </div>

@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useServices } from "../services/fetchCountries";
 import { useStore } from "../store/store";
 import { Link } from "react-router-dom";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 type Params = {
   country_name: string;
@@ -11,6 +13,7 @@ type Params = {
 function CountryPage() {
   const state = useStore();
   const navigate = useNavigate();
+  const [status, setStatus] = useState<string>("loading");
 
   const { setSelectedCountry, selectedCountry, countries } = state;
 
@@ -18,105 +21,145 @@ function CountryPage() {
   const bordersCountry = countries.filter((country) =>
     selectedCountry?.borders?.includes(country.cca3)
   );
+  const nativeName =
+    selectedCountry?.name && Object.entries(selectedCountry?.name.nativeName);
 
   useEffect(() => {
     async function fetchCountry() {
-      if (country_name) {
-        const data = await useServices.fetchfullNameCountry(country_name);
-        setSelectedCountry(data[0]);
+      try {
+        if (country_name) {
+          const data = await useServices.fetchfullNameCountry(country_name);
+          setSelectedCountry(data[0]);
+        }
+        setStatus("success");
+      } catch (error) {
+        setStatus("error");
+        console.log(error);
       }
     }
     fetchCountry();
   }, [country_name, setSelectedCountry]);
 
   return (
-    <section className=" text-xl w-[clamp(30rem,90%,120rem)] mx-auto pt-20 ">
-      <button
-        onClick={() => navigate(-1)}
-        className="text-2xl shadow-[0_0_1rem_rgba(0,0,0,0.15)] px-6 py-2 mb-20"
-      >
-        <i className="fa-solid fa-arrow-left-long"></i>Back
-      </button>
-      <div className="grid grid-cols-2 gap-10 items-center">
-        <div className="w-full">
-          <img
-            src={selectedCountry?.flags.png}
-            alt=""
-            className="w-full
-           h-full shadow-[0_0_1rem_rgba(0,0,0,0.15)] rounded-md"
-          />
-        </div>
+    <div className="dark:bg-gray-800 dark:text-gray-50 min-h-screen flex items-center">
+      <section className=" text-xl w-[clamp(30rem,90%,120rem)] mx-auto  ">
+        <button
+          onClick={() => navigate(-1)}
+          className=" shadow-[0_0_1rem_rgba(0,0,0,0.15)] dark:shadow-[0_0_1rem_rgba(0,0,0,0.65)]  dark:bg-gray-700 px-6 py-3   flex items-center gap-4 "
+        >
+          <i className="fa-solid fa-arrow-left-long"></i>
 
-        <div>
-          <div>
-            <h1 className="font-bold text-3xl mb-6">
-              {selectedCountry?.name?.common}
-            </h1>
-            <div>
-              <p>
-                <span className="font-bold pr-2">Native Name:</span>
-                <span></span>
-              </p>
-              <p>
-                <span className="font-bold pr-2">Population:</span>
-                <span>{selectedCountry?.population.toLocaleString()} </span>
-              </p>
-              <p>
-                <span className="font-bold pr-2">Region:</span>
-                <span>{selectedCountry?.region} </span>
-              </p>
-              <p>
-                <span className="font-bold pr-2">Sub Region:</span>
-                <span>{selectedCountry?.subregion} </span>
-              </p>
-              <p>
-                <span className="font-bold pr-2">Capital:</span>
-                <span>{selectedCountry?.capital} </span>
-              </p>
+          <span className="text-xl">Back</span>
+        </button>
+
+        {status === "loading" && <Loading />}
+        {status === "error" && <Error />}
+        {status === "success" && (
+          <div className="grid grid-cols-2 gap-20 items-center h-[60vh]">
+            <div className="w-full">
+              <img
+                src={selectedCountry?.flags.png}
+                alt=""
+                className="w-full
+           h-full shadow-[0_0_1rem_rgba(0,0,0,0.15)] rounded-md object-cover"
+              />
             </div>
             <div>
-              <p>
-                <span className="font-bold pr-2">Top Level Domain:</span>
-                <span> {selectedCountry?.tld}</span>
-              </p>
-              <p>
-                <span className="font-bold pr-2">Currencies:</span>
-                {selectedCountry?.currencies &&
-                  Object.entries(selectedCountry?.currencies).map(
-                    ([currencyCode, currency]) => (
-                      <span key={currencyCode}>{currency.name}</span>
-                    )
+              <div>
+                <h1 className="font-bold text-4xl mb-10">
+                  {selectedCountry?.name?.common}
+                </h1>
+                <div className="flex items-start gap-20 justify-between mb-32">
+                  <div>
+                    <p className="mb-4">
+                      <span className="font-bold pr-2">Native Name:</span>
+                      <span className="text-gray-600 dark:text-gray-300">
+                        {nativeName &&
+                          nativeName[nativeName.length - 1][1]?.common}
+                      </span>
+                    </p>
+                    <p className="mb-4">
+                      <span className="font-bold pr-2">Population:</span>
+                      <span className="text-gray-600 dark:text-gray-300">
+                        {selectedCountry?.population.toLocaleString()}{" "}
+                      </span>
+                    </p>
+                    <p className="mb-4">
+                      <span className="font-bold pr-2">Region:</span>
+                      <span className="text-gray-600 dark:text-gray-300">
+                        {selectedCountry?.region}{" "}
+                      </span>
+                    </p>
+                    <p className="mb-4">
+                      <span className="font-bold pr-2">Sub Region:</span>
+                      <span className="text-gray-600 dark:text-gray-300">
+                        {selectedCountry?.subregion}{" "}
+                      </span>
+                    </p>
+                    <p className="mb-4">
+                      <span className="font-bold pr-2">Capital:</span>
+                      <span className="text-gray-600 dark:text-gray-300">
+                        {selectedCountry?.capital}{" "}
+                      </span>
+                    </p>
+                  </div>
+                  <div>
+                    <p className="mb-4">
+                      <span className="font-bold pr-2">Top Level Domain:</span>
+                      <span className="text-gray-600 dark:text-gray-300">
+                        {" "}
+                        {selectedCountry?.tld}
+                      </span>
+                    </p>
+                    <p className="mb-4">
+                      <span className="font-bold pr-2">Currencies:</span>
+                      {selectedCountry?.currencies &&
+                        Object.entries(selectedCountry?.currencies).map(
+                          ([currencyCode, currency]) => (
+                            <span
+                              key={currencyCode}
+                              className="text-gray-600 dark:text-gray-300"
+                            >
+                              {currency.name}
+                            </span>
+                          )
+                        )}
+                    </p>
+                    <p className="mb-4">
+                      <span className="font-bold pr-2">Languages:</span>
+                      <span className="text-gray-600 dark:text-gray-300">
+                        {selectedCountry?.languages
+                          ? Object.values(selectedCountry.languages).join(", ")
+                          : ""}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="">
+                <span className="font-bold pr-2">Border Countries: </span>
+                <span className="inline-flex  items-center gap-4  flex-wrap mt-4">
+                  {bordersCountry.length > 0 ? (
+                    bordersCountry.map((country, i) => (
+                      <Link
+                        to={`/country/${country.name.common}`}
+                        key={i}
+                        className="shadow-[0_0_1rem_rgba(0,0,0,0.15)] dark:shadow-[0_0_1rem_rgba(0,0,0,0.5)]  dark:bg-gray-700 py-3 px-6 rounded "
+                        onClick={() => setStatus("loading")}
+                      >
+                        {country.name.common}
+                      </Link>
+                    ))
+                  ) : (
+                    <span>No Border Countries</span>
                   )}
-              </p>
-              <p>
-                <span className="font-bold pr-2">Languages:</span>
-                {selectedCountry?.languages
-                  ? Object.values(selectedCountry.languages).join(", ")
-                  : ""}
-              </p>
+                </span>
+              </div>
             </div>
           </div>
-          <div>
-            <span className="font-bold pr-2 mb-2">Border Countries: </span>
-            <span className="inline-flex  items-center gap-4  flex-wrap">
-              {bordersCountry.length > 0 ? (
-                bordersCountry.map((country, i) => (
-                  <Link
-                    to={`/country/${country.name.common}`}
-                    key={i}
-                    className="shadow-[0_0_1rem_rgba(0,0,0,0.15)] py-2 px-6 "
-                  >
-                    {country.name.common}
-                  </Link>
-                ))
-              ) : (
-                <span>No Border Countries</span>
-              )}
-            </span>
-          </div>
-        </div>
-      </div>
-    </section>
+        )}
+      </section>
+    </div>
   );
 }
 

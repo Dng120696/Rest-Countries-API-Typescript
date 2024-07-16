@@ -1,6 +1,12 @@
 export type Country = {
   name: {
     common: string;
+    nativeName: {
+      [key: string]: {
+        official: string;
+        common: string;
+      };
+    };
   };
   population: number;
   region: string;
@@ -35,6 +41,7 @@ export type State = {
 
 export type Action = {
   setCountries: (data: Countries) => void;
+  setIsDark: () => void;
   setSearchedCountry: (data: Countries) => void;
   setSelectedCountry: (data: Country) => void;
   setSearchQuery: (query: string) => void;

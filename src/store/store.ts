@@ -10,6 +10,11 @@ export const useStore = create<State & Action>()(
       set((state) => {
         state.countries = data;
       }),
+    setIsDark: () =>
+      set((state) => {
+        state.isDark = !state.isDark;
+        localStorage.setItem("isDark", JSON.stringify(state.isDark));
+      }),
     setSearchedCountry: (data: Countries) =>
       set((state) => {
         state.searchedCountry = data;

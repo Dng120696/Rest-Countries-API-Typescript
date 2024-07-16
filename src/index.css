@@ -13,3 +13,18 @@ html {
   font-size: 62.5%;
   box-sizing: inherit;
 }
+.spinner {
+  @apply flex items-center justify-center gap-2 w-full;
+}
+.spinner img {
+  animation: 2s linear infinite rotate;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
