@@ -1,30 +1,61 @@
-# React + TypeScript + Vite
+# Rest Countries API sApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React TypeScript application to explore countries using the REST Countries API. This app includes features such as searching for a specific country, filtering by region, pagination, dark mode, and navigation to a detailed country page.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Technologies Used](#technologies-used)
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Search**: Search for a specific country by name.
+- **Filter by Region**: Filter countries by region (e.g., Africa, America, Asia, Europe, Oceania).
+- **Pagination**: Navigate through the list of countries using pagination.
+- **Dark Mode**: Toggle between light and dark modes.
+- **Country Details**: Select a country to view detailed information on a separate page.
+- **Loading States**: Show loading indicators while fetching data from the API.
 
-- Configure the top-level `parserOptions` property like this:
+Check out the live demo of the app in the link below:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+[Rest Countries API App](https://rest-countries-api-typescript.vercel.app)
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Getting Started
+
+### Prerequisites
+
+- Node.js v18.15.0
+- npm 9.8.1
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Dng120696/Rest-Countries-API-Typescript.git
+   cd Rest-Countries-API-Typescript
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the development Server:
+
+   ```bash
+   npm run dev
+   ```
+
+4. Open http://localhost:5173 to view it in the browser.
+
+## Technologies Used
+
+- React
+- TypeScript
+- Tailwind CSS
+- REST Countries API

@@ -14,7 +14,7 @@ function Header() {
     <header className="py-8 shadow dark:bg-gray-700 bg-white fixed w-full z-[100]">
       <nav className="flex items-center justify-between w-[clamp(30rem,90%,120rem)] mx-auto">
         <Link to="/" onClick={handleResetQuery}>
-          <h1 className="text-4xl font-extrabold text-gray-700 dark:text-gray-100">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-700 dark:text-gray-100">
             Where in the world?
           </h1>
         </Link>

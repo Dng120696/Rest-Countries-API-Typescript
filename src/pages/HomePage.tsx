@@ -4,8 +4,15 @@ import { useStore } from "../store/store";
 import CountriesList from "../components/CountriesList";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
+import Pagination from "../components/Pagination";
 
 function HomePage() {
+  const [startPage, setStartPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [status, setStatus] = useState<string>("loading");
+  const [isSelectRegion, setIsSelectRegion] = useState<boolean>(false);
+  const itemsPerpage: number = 12;
+  const startIndex: number = (startPage - 1) * itemsPerpage;
   const state = useStore();
   const {
     setCountries,
@@ -17,12 +24,6 @@ function HomePage() {
     selectedRegion,
     setSelectedRegion,
   } = state;
-
-  const [startPage, setStartPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [status, setStatus] = useState<string>("loading");
-  const itemsPerpage = 12;
-  const startIndex = (startPage - 1) * itemsPerpage;
 
   const sortedCountries = [...countries]
     .sort((a, b) => a.name.common.localeCompare(b.name.common))
@@ -80,16 +81,13 @@ function HomePage() {
   ]);
 
   return (
-    <div
-      className="
-    dark:bg-gray-800 min-h-screen pt-24"
-    >
-      <section className="py-16 w-[clamp(30rem,90%,120rem)] mx-auto ">
-        <div className="mb-12 flex items-center justify-between  text-2xl ">
-          <div className="w-1/2 relative">
+    <div className="dark:bg-gray-800 min-h-screen pt-24">
+      <section className="py-10 md:py-12 lg:py-16 w-[clamp(30rem,90%,120rem)] mx-auto ">
+        <div className="mb-12 flex md:items-center gap-8 flex-col md:flex-row justify-between  text-2xl ">
+          <div className="w-full relative">
             <input
               type="text"
-              className=" w-full shadow-[0_0_1rem_rgba(0,0,0,0.15)]  border px-6 indent-10 dark:text-gray-100
+              className=" w-full md:w-3/4 lg:w-1/2 shadow-[0_0_1rem_rgba(0,0,0,0.15)]  border px-6 indent-10 dark:text-gray-100
                py-4 rounded outline-gray-400 dark:outline-gray-700 dark:bg-gray-700 dark:border-gray-700"
               placeholder="Search for country..."
               value={searchQuery}
@@ -101,77 +99,51 @@ function HomePage() {
             />
             <i className="fa-solid text-gray-300 fa-magnifying-glass absolute top-1/2 left-10  translate-x-[-50%] translate-y-[-50%] "></i>
           </div>
-
-          <select
-            value={selectedRegion}
-            onChange={(e) => {
-              setStatus("loading");
-              setSelectedRegion(e.target.value);
-            }}
-            className=" w-[20rem] shadow-[0_0_1rem_rgba(0,0,0,0.15)]  border px-6  dark:text-gray-100
-               py-4 rounded outline-gray-400 dark:outline-gray-700 dark:bg-gray-700 dark:border-gray-700"
-          >
-            <option value="selected" className="text-gray-200">
-              Select a country
-            </option>
-            <option value="Africa">Africa</option>
-            <option value="America">America</option>
-            <option value="Asia">Asia</option>
-            <option value="Europe">Europe</option>
-            <option value="Oceania">Oceania</option>
-          </select>
+          <div className="relative cursor-pointer">
+            <select
+              value={selectedRegion}
+              onChange={(e) => {
+                setStatus("loading");
+                setSelectedRegion(e.target.value);
+              }}
+              onClick={() => setIsSelectRegion((selected) => !selected)}
+              className="w-full md:w-[20rem] shadow-lg appearance-none px-6 py-4 rounded outline-none dark:text-gray-100 dark:bg-gray-700  "
+            >
+              <option value="selected" disabled>
+                Filter by Region
+              </option>
+              <option value="Africa">Africa</option>
+              <option value="America">America</option>
+              <option value="Asia">Asia</option>
+              <option value="Europe">Europe</option>
+              <option value="Oceania">Oceania</option>
+            </select>
+            {isSelectRegion}
+            <i
+              className={`fa-solid dark:text-gray-100 absolute top-1/2
+                 right-6 translate-x-[-50%] translate-y-[-50%] ${
+                   isSelectRegion ? "fa-angle-up" : "fa-angle-down"
+                 }`}
+            ></i>
+          </div>
         </div>
         {status === "loading" && <Loading />}
         {status === "error" && <Error />}
         {status === "success" && (
           <>
             {" "}
-            <div className="flex items-center gap-10 flex-wrap justify-between mb-12">
+            <div className="flex items-center gap-14 sm:gap-16 md:gap-20 flex-wrap justify-center lg:justify-between mb-12">
               {searchQuery.length === 0 && selectedRegion === "selected" ? (
                 <CountriesList countries={sortedCountries} />
               ) : (
                 <CountriesList countries={sortedSearchedCountries} />
               )}
             </div>
-            {totalPages > 1 && (
-              <div className="flex items-center text-center flex-wrap gap-6 text-2xl">
-                <button
-                  onClick={() => handlePageChange(startPage - 1)}
-                  disabled={startPage === 1}
-                  className={`rounded-lg py-2 px-4 font-bold ${
-                    startPage === 1
-                      ? "bg-gray-200 text-gray-400  dark:bg-gray-300 dark:text-gray-400  cursor-not-allowed "
-                      : "bg-gray-200 dark:bg-gray-500 dark:text-gray-200"
-                  }`}
-                >
-                  Previous
-                </button>
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handlePageChange(index + 1)}
-                    className={` px-4 py-2   bg-gray-200 dark:bg-gray-500 dark:text-gray-200 rounded-lg font-medium ${
-                      index + 1 === startPage
-                        ? "font-bold text-gray-200 dark:text-gray-500 bg-gray-500 dark:bg-gray-200   "
-                        : ""
-                    }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-                <button
-                  onClick={() => handlePageChange(startPage + 1)}
-                  disabled={startPage === totalPages}
-                  className={`rounded-lg py-2 px-4 font-bold ${
-                    startPage === totalPages
-                      ? "bg-gray-200 text-gray-400  dark:bg-gray-300 dark:text-gray-400 cursor-not-allowed "
-                      : "bg-gray-200 dark:bg-gray-500 dark:text-gray-200"
-                  }`}
-                >
-                  Next
-                </button>
-              </div>
-            )}
+            <Pagination
+              totalPages={totalPages}
+              startPage={startPage}
+              onPageChange={handlePageChange}
+            />
           </>
         )}
       </section>
